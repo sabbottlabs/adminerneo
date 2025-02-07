@@ -43,7 +43,12 @@ function page_header(string $title, string $error = "", $breadcrumb = []): void
 
 	<title><?= $title_page; ?></title>
 <?php
-	echo "<link rel='stylesheet' type='text/css' href='", link_files("default.css", ["../adminer/themes/default.css"]), "'>\n";
+	echo "<link rel='stylesheet' type='text/css' href='", link_files("default.css", [
+		"../adminer/themes/default/variables.css",
+		"../adminer/themes/default/common.css",
+		"../adminer/themes/default/main.css",
+		"../adminer/themes/default/header.css",
+	]), "'>\n";
 
 	$theme = $adminer->getConfig()->getTheme();
 	if ($theme != "default") {
@@ -93,50 +98,54 @@ function page_header(string $title, string $error = "", $breadcrumb = []): void
 
 <div id="content">
 <?php
-	if ($breadcrumb !== null) {
-		echo '<nav id="breadcrumb">';
+	echo "<div class='header'>\n";
 
-		echo '<a href="' . h(HOME_URL) . '" title="', lang('Home'), '">', icon_solo("home"), '</a> » ';
+	if ($breadcrumb !== null) {
+		echo '<nav class="breadcrumb"><ul>';
+
+		echo '<li><a href="' . h(HOME_URL) . '" title="', lang('Home'), '">', icon_solo("home"), '</a></li>';
 
 		$server_name = $adminer->serverName(SERVER);
 
 		if ($breadcrumb === false) {
-			echo h($server_name), " » ";
+			echo "<li>", h($server_name), "</li>";
 		} else {
 			$link = substr(preg_replace('~\b(db|ns)=[^&]*&~', '', ME), 0, -1);
-			echo "<a href='" . h($link) . "' accesskey='1' title='Alt+Shift+1'>$server_name</a> » ";
+			echo "<li><a href='" . h($link) . "' accesskey='1' title='Alt+Shift+1'>$server_name</a></li>";
 
 			if ($_GET["ns"] != "" || (DB != "" && is_array($breadcrumb))) {
-				echo '<a href="' . h($link . "&db=" . urlencode(DB) . (support("scheme") ? "&ns=" : "")) . '">' . h(DB) . '</a> » ';
+				echo '<li><a href="' . h($link . "&db=" . urlencode(DB) . (support("scheme") ? "&ns=" : "")) . '">' . h(DB) . '</a></li>';
 			}
 
 			if ($breadcrumb === true) {
 				if ($_GET["ns"] != "") {
-					echo h($_GET["ns"]) . ' » ';
+					echo '<li>' . h($_GET["ns"]) . '</li>';
 				} else {
-					echo h(DB), " » ";
+					echo "<li>", h(DB), "</li>";
 				}
 			} else {
 				if ($_GET["ns"] != "") {
-					echo '<a href="' . h(substr(ME, 0, -1)) . '">' . h($_GET["ns"]) . '</a> » ';
+					echo '<li><a href="' . h(substr(ME, 0, -1)) . '">' . h($_GET["ns"]) . '</a></li>';
 				}
 
 				foreach ($breadcrumb as $key => $val) {
 					if (is_string($key)) {
 						$desc = (is_array($val) ? $val[1] : h($val));
 						if ($desc != "") {
-							echo "<a href='" . h(ME . "$key=") . urlencode(is_array($val) ? $val[0] : $val) . "'>$desc</a> » ";
+							echo "<li><a href='" . h(ME . "$key=") . urlencode(is_array($val) ? $val[0] : $val) . "'>$desc</a></li>";
 						}
 					} else {
-						echo "$val";
+						echo "<li>$val</li>\n";
 					}
 
 				}
 			}
 		}
 
-		echo "</nav>";
+		echo "</ul></nav>";
 	}
+
+	echo "</div>\n";
 
 	echo "<h2>$title</h2>\n";
 	echo "<div id='ajaxstatus' class='jsonly hidden'></div>\n";

@@ -45,7 +45,7 @@ class Adminer extends AdminerBase
 	* @return string HTML code
 	*/
 	function name() {
-		return "<a id='h1' href='" . h(HOME_URL) . "'><svg role='img' class='logo'><desc>AdminerNeo</desc><use href='" . link_files("logo.svg", ["images/logo.svg"]) . "#logo'/></svg></a>";
+		return "<a href='" . h(HOME_URL) . "'><svg role='img' class='logo'><desc>AdminerNeo</desc><use href='" . link_files("logo.svg", ["images/logo.svg"]) . "#logo'/></svg></a>";
 	}
 
 	/** Get SSL connection options

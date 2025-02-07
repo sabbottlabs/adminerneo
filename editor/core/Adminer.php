@@ -32,7 +32,7 @@ class Adminer extends AdminerBase
 	}
 
 	function name() {
-		return "<a id='h1' href='" . h(HOME_URL) . "'>" . lang('Editor') . "</a>";
+		return "<a href='" . h(HOME_URL) . "'>" . lang('Editor') . "</a>";
 	}
 
 	function connectSsl() {
